@@ -19,13 +19,14 @@ npx.cmd --yes http-server . -a 127.0.0.1 -p 4000 -c-1
 | --- | --- |
 | `index.html` | 姓名、求职方向、个人介绍、技能、项目作品、教育与经历、联系方式 |
 | `assets/portfolio.css` | 颜色、字体、布局、卡片和移动端样式 |
-| `assets/portfolio.js` | 导航、主题切换等交互 |
+| `assets/portfolio.js` | 导航、主题切换、微信二维码弹窗等交互 |
 | `assets/su-yikai.jpg` | 个人头像；替换图片时保持文件名，或同步修改 HTML 中的引用 |
+| `assets/wechat-qr.jpg` | 联系弹窗中的微信二维码；替换图片时保持文件名 |
 | `404.html` | 页面不存在时显示的错误页 |
 
 主页栏目对应 `#about`、`#skills`、`#projects`、`#experience` 和 `#contact`。可以在 `index.html` 中搜索这些 ID，找到需要修改的区域。
 
-项目作品和联系信息在 `index.html` 中维护。原博客文章文件保留，但不作为新网站的导航入口。
+项目作品和联系信息在 `index.html` 中维护。所有“联系我”和“聊聊实习机会”按钮通过 `data-contact-open` 打开微信二维码弹窗；点击关闭按钮、遮罩或按 Esc 可关闭。原博客文章文件保留，但不作为新网站的导航入口。
 
 ## 通过 GitHub Pages 发布
 
@@ -35,7 +36,7 @@ npx.cmd --yes http-server . -a 127.0.0.1 -p 4000 -c-1
 
 ```powershell
 git diff
-git add index.html assets/portfolio.css assets/portfolio.js assets/favicon.svg assets/su-yikai.jpg 404.html README.md .nojekyll
+git add index.html assets/portfolio.css assets/portfolio.js assets/favicon.svg assets/su-yikai.jpg assets/wechat-qr.jpg 404.html README.md .nojekyll
 git add -u -- assets
 git commit -m "Update job seeking portfolio"
 git push origin main

@@ -32,7 +32,7 @@
   }
   menuToggle.addEventListener('click', () => setMenu(menuToggle.getAttribute('aria-expanded') !== 'true'));
   nav.addEventListener('click', event => {
-    if (event.target.closest('a')) setMenu(false);
+    if (event.target.closest('a, [data-contact-open]')) setMenu(false);
   });
   document.addEventListener('click', event => {
     if (!nav.contains(event.target) && !menuToggle.contains(event.target)) setMenu(false);
@@ -45,6 +45,38 @@
   });
   window.matchMedia('(min-width: 821px)').addEventListener('change', event => {
     if (event.matches) setMenu(false);
+  });
+
+  const contactDialog = document.getElementById('contact-dialog');
+  const contactDialogClose = contactDialog.querySelector('.contact-dialog-close');
+  let contactOpener = null;
+  document.querySelectorAll('[data-contact-open]').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      if (contactDialog.open) return;
+      contactOpener = nav.contains(trigger) && window.matchMedia('(max-width: 820px)').matches
+        ? menuToggle : trigger;
+      setMenu(false);
+      contactDialog.showModal();
+      root.classList.add('contact-modal-open');
+    });
+  });
+  contactDialogClose.addEventListener('click', () => contactDialog.close());
+  contactDialog.addEventListener('keydown', event => {
+    // The close button is the dialog's only keyboard control.
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      contactDialogClose.focus();
+    }
+  });
+  contactDialog.addEventListener('click', event => {
+    if (event.target !== contactDialog) return;
+    const bounds = contactDialog.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right ||
+        event.clientY < bounds.top || event.clientY > bounds.bottom) contactDialog.close();
+  });
+  contactDialog.addEventListener('close', () => {
+    root.classList.remove('contact-modal-open');
+    if (contactOpener) contactOpener.focus({ preventScroll: true });
   });
 
   const navLinks = [...nav.querySelectorAll('a[href^="#"]')];
